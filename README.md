@@ -21,4 +21,4 @@
 2. 给文件赋予可执行权限 chmod +x dic.py
 3. 修改 db = MySQLDatabase('mydb', user='root')，数据库的schema及用户名，如果有密码则加上password参数
 4. 修改main()函数，先调用createTable函数创建表，然后执行executeDic函数
---
+
