@@ -14,8 +14,8 @@ class BaseModel(Model):
 
 # 自定义词典
 class MyDic(BaseModel):
-    key = CharField()
-    value = CharField()
+    key = CharField(max_length=256)
+    value = CharField(max_length=2048)
 
 
 def getMd5(src):
@@ -50,12 +50,11 @@ def showInfo(json):
 
 
 appKey = '3785101610c308d5'
-q = '支票'
 salt = random.randint(32768, 65536)
 key = 'bPn9FXAVZLqvmlz1kAXFCUwK2yW7Tw1m'
 
 params = {
-    'q': q,
+    'q': None,
     'from': 'auto',
     'to': 'auto',
     'appKey': appKey,
