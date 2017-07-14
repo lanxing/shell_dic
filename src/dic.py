@@ -20,6 +20,7 @@ class BaseModel(Model):
 class MyDic(BaseModel):
     key = CharField(max_length=256)
     value = CharField(max_length=2048)
+    times = BigIntegerField(default=1)
 
 
 def getMd5(src):
@@ -87,6 +88,8 @@ def executeDic():
     while word is not None and word != 'q':
         try:
             value = MyDic.get(MyDic.key == word).value
+            q = MyDic.update(times = MyDic.times + 1).where(MyDic.key == word)
+            q.execute()
             showInfo(eval(value))
         except DoesNotExist:
             params['q'] = word
