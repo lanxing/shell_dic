@@ -1,9 +1,11 @@
-#! /usr/bin/env python3.5
+#! /usr/bin/env python3.6
 
 import hashlib
 import random
 import requests
 import re
+
+from certifi import where
 from peewee import *
 
 db = MySQLDatabase('mydb', user='root')
@@ -18,8 +20,9 @@ class BaseModel(Model):
 
 # 自定义词典
 class MyDic(BaseModel):
-    key = CharField(max_length=256)
+    key = CharField(max_length=256, index=True)
     value = CharField(max_length=2048)
+    times = BigIntegerField(default=0)
 
 
 def getMd5(src):
@@ -87,6 +90,8 @@ def executeDic():
     while word is not None and word != 'q':
         try:
             value = MyDic.get(MyDic.key == word).value
+            q = MyDic.update(times=MyDic.times + 1).where(MyDic.key == word)
+            q.execute()
             showInfo(eval(value))
         except DoesNotExist:
             params['q'] = word
@@ -105,6 +110,7 @@ def executeDic():
 
 
 def main():
+    # createTable(MyDic)
     executeDic()
 
 if __name__ == '__main__':
