@@ -4,6 +4,7 @@ import hashlib
 import random
 import requests
 import re
+import os
 
 from certifi import where
 from peewee import *
@@ -23,6 +24,7 @@ class MyDic(BaseModel):
     key = CharField(max_length=256, index=True)
     value = CharField(max_length=2048)
     times = BigIntegerField(default=1)
+
 
 def getMd5(src):
     md5 = hashlib.md5()
@@ -80,16 +82,24 @@ def executeDic():
         'salt': salt,
         'sign': None
     }
-    remindStr = '请输入需要查询的单词或语句(q for quit):'
-    word = input(remindStr)
+    remindStr = '请输入需要查询的单词或语句(q for quit, c for clear):'
     db.connect()
 
     # 如果是中文的话则只缓存字符串长度小于5的翻译结果
     wordLenLimit = 5
-    while word is not None and word != 'q':
+    while True:
+        word = input(remindStr)
+        if word is None:
+            break
+        lowerWord = word.lower()
+        if lowerWord == 'q' or lowerWord == 'quit':
+            break
+        if lowerWord == 'c' or lowerWord == 'clear':
+            os.system("clear")
+            continue
         try:
             value = MyDic.get(MyDic.key == word).value
-            q = MyDic.update(times = MyDic.times + 1).where(MyDic.key == word)
+            q = MyDic.update(times=MyDic.times + 1).where(MyDic.key == word)
             q.execute()
             showInfo(eval(value))
         except DoesNotExist:
@@ -105,12 +115,12 @@ def executeDic():
                 showInfo(value)
             else:
                 print(value)
-        word = input(remindStr)
 
 
 def main():
     # createTable(MyDic)
     executeDic()
+
 
 if __name__ == '__main__':
     main()
