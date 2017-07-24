@@ -24,6 +24,7 @@ class MyDic(BaseModel):
     value = CharField(max_length=2048)
     times = BigIntegerField(default=1)
 
+
 def getMd5(src):
     md5 = hashlib.md5()
     md5.update(src.encode(encoding='utf8'))
@@ -89,7 +90,7 @@ def executeDic():
     while word is not None and word != 'q':
         try:
             value = MyDic.get(MyDic.key == word).value
-            q = MyDic.update(times = MyDic.times + 1).where(MyDic.key == word)
+            q = MyDic.update(times=MyDic.times + 1).where(MyDic.key == word)
             q.execute()
             showInfo(eval(value))
         except DoesNotExist:
@@ -111,6 +112,7 @@ def executeDic():
 def main():
     # createTable(MyDic)
     executeDic()
+
 
 if __name__ == '__main__':
     main()
