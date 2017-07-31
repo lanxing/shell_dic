@@ -86,7 +86,8 @@ def executeDic():
     db.connect()
 
     # 如果是中文的话则只缓存字符串长度小于5的翻译结果
-    wordLenLimit = 5
+    chineseWordLenLimit = 5
+    englishWordLenLimit = 20
     while True:
         word = input(remindStr)
         if word is None:
@@ -110,8 +111,13 @@ def executeDic():
             value = r.json()
             if value.get('errorCode') == '0':
 
-                if containChinese(word) is False or len(word) < wordLenLimit:
+                if containChinese(word) is True:
+                    if len(word) < chineseWordLenLimit:
+                        MyDic.create(key=word, value=value)
+                elif len(word) < englishWordLenLimit:
                     MyDic.create(key=word, value=value)
+                # if containChinese(word) is False or len(word) < wordLenLimit:
+                #     MyDic.create(key=word, value=value)
                 showInfo(value)
             else:
                 print(value)
