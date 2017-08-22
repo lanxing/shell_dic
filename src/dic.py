@@ -90,8 +90,8 @@ def executeDic():
     englishWordLenLimit = 20
     while True:
         word = input(remindStr)
-        if word is None:
-            break
+        if word is None or word == "":
+            continue
         lowerWord = word.lower()
         if lowerWord == 'q' or lowerWord == 'quit':
             break
