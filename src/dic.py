@@ -6,7 +6,6 @@ import requests
 import re
 import os
 
-from certifi import where
 from peewee import *
 
 db = MySQLDatabase('mydb', user='root')
